@@ -1,0 +1,10 @@
+<button id="theme-toggle" class="rounded border border-border px-3 py-1 text-text">
+  Toggle theme
+</button>
+<script is:inline>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+</script>

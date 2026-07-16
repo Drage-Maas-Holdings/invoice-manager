@@ -141,3 +141,13 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+dist/
+.astro/
+
+# Local SQLite database
+data.db
+
+# Local tool configs
+.claude/
+.opencode/
+.vscode/
