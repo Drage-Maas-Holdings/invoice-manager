@@ -1,0 +1,93 @@
+@import "tailwindcss";
+@plugin "flowbite/plugin";
+@source "../../node_modules/flowbite";
+
+/* Class-based dark mode - Tailwind v4 defaults to prefers-color-scheme,
+   this makes `dark:` respond to a `.dark` class instead so the toggle works. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #fafbf8;      /* soft_linen 900 */
+  --surface: #ecf1ef;         /* alabaster_grey 800 */
+  --border: #dae3de;          /* alabaster_grey 600 */
+  --text: #242423;            /* carbon_black 500 */
+  --text-muted: #5a5e5a;      /* graphite 600 */
+  --accent: #f5cb5c;          /* tuscan_sun 500 */
+  --accent-strong: #f1b81d;   /* tuscan_sun 400 */
+}
+
+.dark {
+  --background: #242423;      /* carbon_black 500 */
+  --surface: #282a28;         /* graphite 400 */
+  --border: #5a5e5a;          /* graphite 600 */
+  --text: #fafbf8;            /* soft_linen 900 */
+  --text-muted: #acafac;      /* graphite 800 */
+  --accent: #f5cb5c;          /* tuscan_sun 500 */
+  --accent-strong: #f7d67d;   /* tuscan_sun 600 */
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+
+  --color-alabaster_grey-100: #25312b;
+  --color-alabaster_grey-200: #4a6256;
+  --color-alabaster_grey-300: #6f9281;
+  --color-alabaster_grey-400: #a0b7ab;
+  --color-alabaster_grey-500: #cfdbd5;
+  --color-alabaster_grey-600: #dae3de;
+  --color-alabaster_grey-700: #e3eae7;
+  --color-alabaster_grey-800: #ecf1ef;
+  --color-alabaster_grey-900: #f6f8f7;
+
+  --color-soft_linen-100: #323b21;
+  --color-soft_linen-200: #647642;
+  --color-soft_linen-300: #94ab69;
+  --color-soft_linen-400: #becca4;
+  --color-soft_linen-500: #e8eddf;
+  --color-soft_linen-600: #ecf0e5;
+  --color-soft_linen-700: #f1f4eb;
+  --color-soft_linen-800: #f6f8f2;
+  --color-soft_linen-900: #fafbf8;
+
+  --color-tuscan_sun-100: #3f2f04;
+  --color-tuscan_sun-200: #7f5f08;
+  --color-tuscan_sun-300: #be8e0c;
+  --color-tuscan_sun-400: #f1b81d;
+  --color-tuscan_sun-500: #f5cb5c;
+  --color-tuscan_sun-600: #f7d67d;
+  --color-tuscan_sun-700: #f9e09d;
+  --color-tuscan_sun-800: #fbebbe;
+  --color-tuscan_sun-900: #fdf5de;
+
+  --color-carbon_black-100: #070707;
+  --color-carbon_black-200: #0e0e0e;
+  --color-carbon_black-300: #161615;
+  --color-carbon_black-400: #1d1d1c;
+  --color-carbon_black-500: #242423;
+  --color-carbon_black-600: #50504f;
+  --color-carbon_black-700: #7d7d7a;
+  --color-carbon_black-800: #a8a8a6;
+  --color-carbon_black-900: #d4d4d3;
+
+  --color-graphite-100: #0a0a0a;
+  --color-graphite-200: #141514;
+  --color-graphite-300: #1e1f1e;
+  --color-graphite-400: #282a28;
+  --color-graphite-500: #333533;
+  --color-graphite-600: #5a5e5a;
+  --color-graphite-700: #828782;
+  --color-graphite-800: #acafac;
+  --color-graphite-900: #d5d7d5;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text;
+  }
+}
