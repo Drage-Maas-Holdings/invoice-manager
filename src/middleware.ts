@@ -25,5 +25,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
+  if ((pathname === '/staff' || pathname.startsWith('/staff/')) && pathname !== '/staff/login') {
+    if (!context.locals.actor || context.locals.actor.actor_type !== 'staff') {
+      return context.redirect('/staff/login', 302);
+    }
+  }
+
   return next();
 });

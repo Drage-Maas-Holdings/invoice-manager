@@ -1,0 +1,170 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Icon from '../../../components/Icon.astro';
+import { invoiceRepository } from '../../../repositories/invoice.sqlite';
+import { vendorRepository } from '../../../repositories/vendor.sqlite';
+import { auditLogRepository } from '../../../repositories/audit-log.sqlite';
+
+const { id } = Astro.params;
+const invoice = invoiceRepository.findById(id!);
+
+if (!invoice) {
+  return new Response(null, { status: 404 });
+}
+
+const vendor = vendorRepository.findById(invoice.vendor_id);
+const auditLogs = auditLogRepository.findByInvoice(invoice.id);
+
+function statusPillClass(status: string): string {
+  if (status === 'reconciled') return 'status-pill--done';
+  if (status === 'rejected') return 'status-pill--rejected';
+  if (status === 'approved' || status === 'ready_for_payment') return 'status-pill--active';
+  return 'status-pill--pending';
+}
+
+function matchPillClass(match: string): string {
+  if (match === 'matched') return 'status-pill--done';
+  if (match === 'unmatched') return 'status-pill--rejected';
+  return 'status-pill--neutral';
+}
+
+function actionLabel(status: string): string | null {
+  if (status === 'pending_approval') return 'Approve';
+  if (status === 'approved') return 'Mark ready for payment';
+  if (status === 'ready_for_payment') return 'Mark reconciled';
+  return null;
+}
+
+function actionRoute(status: string): string | null {
+  if (status === 'pending_approval') return `/api/staff/invoices/${id}/approve`;
+  if (status === 'approved') return `/api/staff/invoices/${id}/ready-for-payment`;
+  if (status === 'ready_for_payment') return `/api/staff/invoices/${id}/reconcile`;
+  return null;
+}
+
+const action = actionLabel(invoice.status);
+const actionUrl = actionRoute(invoice.status);
+const isTerminal = invoice.status === 'rejected' || invoice.status === 'reconciled';
+const isPendingApproval = invoice.status === 'pending_approval';
+---
+<Layout title={`Invoice ${invoice.invoice_number}`}>
+  <div class="page-shell">
+    <a href="/staff" class="mb-4 inline-flex items-center gap-1 text-sm text-text-muted hover:text-text transition-colors">
+      <Icon name="chevron-right" class="h-3 w-3 rotate-180" /> Back to invoices
+    </a>
+
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h1 class="page-title">Invoice {invoice.invoice_number}</h1>
+        <p class="caption mt-1">{vendor?.name ?? 'Unknown vendor'} &middot; {invoice.currency} {invoice.amount.toFixed(2)}</p>
+      </div>
+      <span class={`status-pill text-sm ${statusPillClass(invoice.status)}`}>{invoice.status.replace(/_/g, ' ')}</span>
+    </div>
+
+    <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="kpi-card">
+        <div class="kpi-card-label">PO Reference</div>
+        <div class="kpi-card-value text-base">{invoice.po_reference}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">Due Date</div>
+        <div class="kpi-card-value text-base">{invoice.due_date?.toLocaleDateString() ?? '—'}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">Match Status</div>
+        <div class="mt-1"><span class={`status-pill ${matchPillClass(invoice.match_status)}`}>{invoice.match_status.replace(/_/g, ' ')}</span></div>
+      </div>
+    </div>
+
+    {action && (
+      <div class="mb-8 rounded-lg border border-border bg-surface p-4">
+        <div class="flex items-center gap-3">
+          {isPendingApproval && (
+            <>
+              <div class="flex-1">
+                <label for="action-note" class="mb-1 block text-sm text-text-muted">Note (optional)</label>
+                <input id="action-note" type="text" placeholder="Add a note..." class="w-full rounded border border-border bg-background px-3 py-2 text-sm text-text" />
+              </div>
+              <button id="btn-approve" class="action-btn action-btn--primary" data-url={actionUrl}>Approve</button>
+              <button id="btn-reject" class="action-btn action-btn--danger" data-url={`/api/staff/invoices/${id}/reject`}>Reject</button>
+            </>
+          )}
+          {!isPendingApproval && !isTerminal && (
+            <>
+              <div class="flex-1">
+                <label for="action-note" class="mb-1 block text-sm text-text-muted">Note (optional)</label>
+                <input id="action-note" type="text" placeholder="Add a note..." class="w-full rounded border border-border bg-background px-3 py-2 text-sm text-text" />
+              </div>
+              <button id="btn-action" class="action-btn action-btn--primary" data-url={actionUrl}>{action}</button>
+            </>
+          )}
+          <p id="action-error" class="hidden text-sm text-red-500"></p>
+        </div>
+      </div>
+    )}
+
+    {isTerminal && (
+      <div class="mb-8 rounded-lg border border-border bg-surface p-4">
+        <p class="caption">This invoice is <strong>{invoice.status.replace(/_/g, ' ')}</strong>. No further actions are available.</p>
+      </div>
+    )}
+
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Actor</th>
+            <th>Action</th>
+            <th>Note</th>
+            <th class="numeric">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {auditLogs.length === 0 && (
+            <tr><td colspan="4" class="px-4 py-8 text-center caption">No audit entries.</td></tr>
+          )}
+          {auditLogs.map(log => (
+            <tr>
+              <td class="font-medium">{log.actor_label}</td>
+              <td><span class={`status-pill ${/rejected|unmatched/i.test(log.action) ? 'status-pill--rejected' : /reconciled|matched/i.test(log.action) ? 'status-pill--done' : log.action === 'approved' ? 'status-pill--active' : 'status-pill--pending'}`}>{log.action.replace(/_/g, ' ')}</span></td>
+              <td class="caption">{log.notes ?? '—'}</td>
+              <td class="numeric tabular-nums text-sm text-text-muted">{log.created_at.toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    async function doAction(url) {
+      const noteEl = document.getElementById('action-note');
+      const errorEl = document.getElementById('action-error');
+      errorEl.classList.add('hidden');
+
+      const body = {};
+      if (noteEl && noteEl.value) body.note = noteEl.value;
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        const err = await res.json();
+        errorEl.textContent = err.error || 'Action failed';
+        errorEl.classList.remove('hidden');
+      }
+    }
+
+    const approveBtn = document.getElementById('btn-approve');
+    const rejectBtn = document.getElementById('btn-reject');
+    const actionBtn = document.getElementById('btn-action');
+
+    approveBtn?.addEventListener('click', () => doAction(approveBtn.dataset.url));
+    rejectBtn?.addEventListener('click', () => doAction(rejectBtn.dataset.url));
+    actionBtn?.addEventListener('click', () => doAction(actionBtn.dataset.url));
+  </script>
+</Layout>
