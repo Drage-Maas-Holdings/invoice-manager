@@ -35,3 +35,15 @@ export const staff = sqliteTable('staff', {
   password_hash: text('password_hash').notNull(),
   created_at: integer('created_at', { mode: 'timestamp' }).notNull(),
 });
+
+export const audit_log = sqliteTable('audit_log', {
+  id: text('id').primaryKey(),
+  invoice_id: text('invoice_id').notNull().references(() => invoice.id),
+  actor_type: text('actor_type').notNull(),
+  staff_id: text('staff_id').references(() => staff.id),
+  vendor_id: text('vendor_id').references(() => vendor.id),
+  actor_label: text('actor_label').notNull(),
+  action: text('action').notNull(),
+  notes: text('notes'),
+  created_at: integer('created_at', { mode: 'timestamp' }).notNull(),
+});
