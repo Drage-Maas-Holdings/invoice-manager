@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+if (Astro.locals.actor?.actor_type === 'vendor') {
+  return Astro.redirect('/vendor');
+}
+---
+<Layout title="Vendor Login">
+  <div class="flex min-h-screen items-center justify-center">
+    <div class="w-full max-w-sm rounded-lg border border-border bg-surface p-6 shadow-sm">
+      <h1 class="mb-6 text-center text-2xl font-semibold text-text">Vendor Login</h1>
+      <form id="login-form">
+        <div class="mb-4">
+          <label for="name" class="mb-1 block text-sm font-medium text-text">Vendor Name</label>
+          <input id="name" name="name" type="text" required class="w-full rounded border border-border bg-background px-3 py-2 text-text" />
+        </div>
+        <div class="mb-6">
+          <label for="passcode" class="mb-1 block text-sm font-medium text-text">Passcode</label>
+          <input id="passcode" name="passcode" type="password" required class="w-full rounded border border-border bg-background px-3 py-2 text-text" />
+        </div>
+        <p id="login-error" class="mb-3 hidden text-sm text-red-500"></p>
+        <button type="submit" class="w-full rounded bg-accent px-4 py-2 font-medium text-carbon_black-500 transition hover:bg-accent-strong">Log in</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.getElementById('login-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const data = new FormData(form);
+      const errorEl = document.getElementById('login-error');
+      errorEl.classList.add('hidden');
+
+      const res = await fetch('/api/auth/vendor/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: data.get('name'), passcode: data.get('passcode') }),
+      });
+
+      if (res.ok) {
+        window.location.href = '/vendor';
+      } else {
+        const body = await res.json();
+        errorEl.textContent = body.error || 'Invalid name or passcode';
+        errorEl.classList.remove('hidden');
+      }
+    });
+  </script>
+</Layout>

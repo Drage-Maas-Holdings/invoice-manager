@@ -19,5 +19,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
+  if ((pathname === '/vendor' || pathname.startsWith('/vendor/')) && pathname !== '/vendor/login') {
+    if (!context.locals.actor || context.locals.actor.actor_type !== 'vendor') {
+      return context.redirect('/vendor/login', 302);
+    }
+  }
+
   return next();
 });
