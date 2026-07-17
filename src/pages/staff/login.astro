@@ -1,22 +1,22 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-if (Astro.locals.actor?.actor_type === 'vendor') {
-  return Astro.redirect('/vendor');
+if (Astro.locals.actor?.actor_type === 'staff') {
+  return Astro.redirect('/staff');
 }
 ---
-<Layout title="Vendor Login">
+<Layout title="Staff Login">
   <div class="flex min-h-screen items-center justify-center">
     <div class="w-full max-w-sm page-shell">
-      <h1 class="page-title mb-6 text-center">Vendor Login</h1>
+      <h1 class="page-title mb-6 text-center">Staff Login</h1>
       <form id="login-form" class="rounded-lg border border-border bg-surface p-6">
         <div class="mb-4">
-          <label for="name" class="mb-1 block text-sm font-medium text-text">Vendor Name</label>
-          <input id="name" name="name" type="text" required class="w-full rounded border border-border bg-background px-3 py-2 text-text" />
+          <label for="email" class="mb-1 block text-sm font-medium text-text">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required class="w-full rounded border border-border bg-background px-3 py-2 text-text" />
         </div>
         <div class="mb-6">
-          <label for="passcode" class="mb-1 block text-sm font-medium text-text">Passcode</label>
-          <input id="passcode" name="passcode" type="password" required class="w-full rounded border border-border bg-background px-3 py-2 text-text" />
+          <label for="password" class="mb-1 block text-sm font-medium text-text">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required class="w-full rounded border border-border bg-background px-3 py-2 text-text" />
         </div>
         <p id="login-error" class="mb-3 hidden text-sm text-red-500"></p>
         <button type="submit" class="action-btn action-btn--primary w-full">Log in</button>
@@ -31,17 +31,17 @@ if (Astro.locals.actor?.actor_type === 'vendor') {
       const errorEl = document.getElementById('login-error');
       errorEl.classList.add('hidden');
 
-      const res = await fetch('/api/auth/vendor/login', {
+      const res = await fetch('/api/auth/staff/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: data.get('name'), passcode: data.get('passcode') }),
+        body: JSON.stringify({ email: data.get('email'), password: data.get('password') }),
       });
 
       if (res.ok) {
-        window.location.href = '/vendor';
+        window.location.href = '/staff';
       } else {
         const body = await res.json();
-        errorEl.textContent = body.error || 'Invalid name or passcode';
+        errorEl.textContent = body.error || 'Invalid email or password';
         errorEl.classList.remove('hidden');
       }
     });

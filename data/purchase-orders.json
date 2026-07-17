@@ -28,5 +28,11 @@
     "vendor_name": "Initech",
     "total_amount": 1200.00,
     "currency": "USD"
+  },
+  {
+    "po_number": "PO-2024-006",
+    "vendor_name": "Acme",
+    "total_amount": 5000.00,
+    "currency": "USD"
   }
 ]

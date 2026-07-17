@@ -5,53 +5,66 @@ import { invoiceRepository } from '../../repositories/invoice.sqlite';
 
 const vendorId = (Astro.locals.actor as { vendor_id: string }).vendor_id;
 const invoices = invoiceRepository.findByVendor(vendorId);
+
+function statusPillClass(status: string): string {
+  if (status === 'reconciled') return 'status-pill--done';
+  if (status === 'rejected') return 'status-pill--rejected';
+  if (status === 'approved' || status === 'ready_for_payment') return 'status-pill--active';
+  return 'status-pill--pending';
+}
+
+function matchPillClass(match: string): string {
+  if (match === 'matched') return 'status-pill--done';
+  if (match === 'unmatched') return 'status-pill--rejected';
+  return 'status-pill--neutral';
+}
 ---
 <Layout title="Vendor Portal">
-  <div class="mx-auto max-w-5xl p-4">
+  <div class="page-shell">
     <div class="mb-6 flex items-center justify-between">
-      <h1 class="text-2xl font-semibold text-text">Vendor Portal</h1>
+      <h1 class="page-title">Vendor Portal</h1>
       <div class="flex items-center gap-4">
         <ThemeToggle />
         <form id="logout-form" method="POST" action="/api/auth/logout">
-          <button type="submit" class="rounded border border-border px-3 py-1 text-text hover:bg-surface">Log out</button>
+          <button type="submit" class="action-btn action-btn--primary">Log out</button>
         </form>
       </div>
     </div>
 
-    <div class="mb-8 overflow-x-auto rounded-lg border border-border">
-      <table class="w-full text-left text-sm text-text">
-        <thead class="bg-surface">
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
           <tr>
-            <th class="px-4 py-2">Invoice #</th>
-            <th class="px-4 py-2">PO Reference</th>
-            <th class="px-4 py-2">Amount</th>
-            <th class="px-4 py-2">Currency</th>
-            <th class="px-4 py-2">Due Date</th>
-            <th class="px-4 py-2">Status</th>
-            <th class="px-4 py-2">Match</th>
+            <th>Invoice #</th>
+            <th>PO Reference</th>
+            <th class="numeric">Amount</th>
+            <th>Currency</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Match</th>
           </tr>
         </thead>
         <tbody>
           {invoices.length === 0 && (
-            <tr><td colspan="7" class="px-4 py-4 text-center text-text-muted">No invoices found.</td></tr>
+            <tr><td colspan="7" class="px-4 py-8 text-center caption">No invoices found.</td></tr>
           )}
           {invoices.map(inv => (
-            <tr class="border-t border-border">
-              <td class="px-4 py-2">{inv.invoice_number}</td>
-              <td class="px-4 py-2">{inv.po_reference}</td>
-              <td class="px-4 py-2">{inv.amount.toFixed(2)}</td>
-              <td class="px-4 py-2">{inv.currency}</td>
-              <td class="px-4 py-2">{inv.due_date?.toLocaleDateString() ?? '—'}</td>
-              <td class="px-4 py-2">{inv.status.replace(/_/g, ' ')}</td>
-              <td class="px-4 py-2">{inv.match_status.replace(/_/g, ' ')}</td>
+            <tr>
+              <td class="tabular-nums">{inv.invoice_number}</td>
+              <td class="tabular-nums">{inv.po_reference}</td>
+              <td class="numeric">{inv.amount.toFixed(2)}</td>
+              <td>{inv.currency}</td>
+              <td class="tabular-nums">{inv.due_date?.toLocaleDateString() ?? '—'}</td>
+              <td><span class={`status-pill ${statusPillClass(inv.status)}`}>{inv.status.replace(/_/g, ' ')}</span></td>
+              <td><span class={`status-pill ${matchPillClass(inv.match_status)}`}>{inv.match_status.replace(/_/g, ' ')}</span></td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
 
-    <div class="rounded-lg border border-border bg-surface p-6">
-      <h2 class="mb-4 text-lg font-semibold text-text">Submit Invoice</h2>
+    <div class="mt-8 rounded-lg border border-border bg-surface p-6">
+      <h2 class="section-heading mb-4">Submit Invoice</h2>
       <form id="submit-form" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label for="invoice_number" class="mb-1 block text-sm font-medium text-text">Invoice Number *</label>
@@ -79,7 +92,7 @@ const invoices = invoiceRepository.findByVendor(vendorId);
         </div>
         <div class="sm:col-span-2">
           <p id="submit-error" class="mb-3 hidden text-sm text-red-500"></p>
-          <button type="submit" class="rounded bg-accent px-4 py-2 font-medium text-carbon_black-500 transition hover:bg-accent-strong">Submit Invoice</button>
+          <button type="submit" class="action-btn action-btn--primary">Submit Invoice</button>
         </div>
       </form>
     </div>

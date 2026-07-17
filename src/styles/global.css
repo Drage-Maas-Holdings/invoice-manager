@@ -14,6 +14,17 @@
   --text-muted: #5a5e5a;      /* graphite 600 */
   --accent: #f5cb5c;          /* tuscan_sun 500 */
   --accent-strong: #f1b81d;   /* tuscan_sun 400 */
+
+  --status-pending-bg: #fef3c7;
+  --status-pending-text: #92400e;
+  --status-active-bg: #dbeafe;
+  --status-active-text: #1e40af;
+  --status-done-bg: #d1fae5;
+  --status-done-text: #065f46;
+  --status-rejected-bg: #fee2e2;
+  --status-rejected-text: #991b1b;
+  --status-neutral-bg: #f3f4f6;
+  --status-neutral-text: #4b5563;
 }
 
 .dark {
@@ -24,6 +35,17 @@
   --text-muted: #acafac;      /* graphite 800 */
   --accent: #f5cb5c;          /* tuscan_sun 500 */
   --accent-strong: #f7d67d;   /* tuscan_sun 600 */
+
+  --status-pending-bg: #78350f;
+  --status-pending-text: #fde68a;
+  --status-active-bg: #1e3a5f;
+  --status-active-text: #93c5fd;
+  --status-done-bg: #064e3b;
+  --status-done-text: #a7f3d0;
+  --status-rejected-bg: #7f1d1d;
+  --status-rejected-text: #fca5a5;
+  --status-neutral-bg: #374151;
+  --status-neutral-text: #d1d5db;
 }
 
 @theme {
@@ -88,6 +110,119 @@
 
 @layer base {
   body {
-    @apply bg-background text-text;
+    @apply bg-background text-text font-sans antialiased;
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8;
+  }
+
+  .page-title {
+    @apply text-2xl font-semibold tracking-tight text-text;
+  }
+
+  .section-heading {
+    @apply text-lg font-medium text-text;
+  }
+
+  .caption {
+    @apply text-sm text-text-muted;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kpi-card {
+    @apply rounded-lg border border-border bg-surface p-4;
+  }
+
+  .kpi-card-value {
+    @apply mt-1 text-2xl font-semibold tabular-nums text-text;
+  }
+
+  .kpi-card-label {
+    @apply text-sm text-text-muted;
+  }
+
+  .data-table {
+    @apply w-full text-left text-sm;
+  }
+
+  .data-table thead {
+    @apply border-b border-border bg-surface text-xs font-medium uppercase tracking-wider text-text-muted;
+  }
+
+  .data-table th {
+    @apply px-4 py-3;
+  }
+
+  .data-table td {
+    @apply px-4 py-3 text-text;
+  }
+
+  .data-table tbody tr {
+    @apply border-b border-border transition-colors hover:bg-surface/50;
+  }
+
+  .data-table tbody tr:last-child {
+    @apply border-b-0;
+  }
+
+  .data-table td.numeric,
+  .data-table th.numeric {
+    @apply text-right tabular-nums;
+  }
+
+  .status-pill {
+    @apply inline-block rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .status-pill--pending {
+    background-color: var(--status-pending-bg);
+    color: var(--status-pending-text);
+  }
+
+  .status-pill--active {
+    background-color: var(--status-active-bg);
+    color: var(--status-active-text);
+  }
+
+  .status-pill--done {
+    background-color: var(--status-done-bg);
+    color: var(--status-done-text);
+  }
+
+  .status-pill--rejected {
+    background-color: var(--status-rejected-bg);
+    color: var(--status-rejected-text);
+  }
+
+  .status-pill--neutral {
+    background-color: var(--status-neutral-bg);
+    color: var(--status-neutral-text);
+  }
+
+  .table-container {
+    @apply overflow-x-auto rounded-lg border border-border;
+  }
+
+  .action-btn {
+    @apply rounded px-4 py-2 text-sm font-medium transition-colors;
+  }
+
+  .action-btn--primary {
+    @apply bg-accent text-carbon_black-500 hover:bg-accent-strong;
+  }
+
+  .action-btn--danger {
+    background-color: var(--status-rejected-bg);
+    color: var(--status-rejected-text);
+  }
+
+  .action-btn--danger:hover {
+    filter: brightness(0.9);
   }
 }
