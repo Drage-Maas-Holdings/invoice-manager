@@ -45,6 +45,10 @@ Approve and reject SHALL only be valid for invoices whose current `status` is `p
 - **WHEN** approve is posted for an invoice in `rejected`
 - **THEN** the response is 409 and the invoice remains `rejected`
 
+#### Scenario: Ready for payment is not reversible to approved
+- **WHEN** approve is posted for an invoice in `ready_for_payment`
+- **THEN** the response is 409 and the status remains `ready_for_payment`
+
 ### Requirement: Match status does not gate approval
 Approval and rejection SHALL be available for invoices regardless of `match_status` — an `unmatched` invoice is flagged, not blocked. The `match_status` value SHALL remain unchanged by approval or rejection.
 
