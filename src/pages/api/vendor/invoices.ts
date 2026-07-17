@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { vendorRepository } from '../../../repositories/vendor.sqlite';
 import { poRepository } from '../../../repositories/po.json';
 import { invoiceRepository } from '../../../repositories/invoice.sqlite';
+import { auditLogRepository } from '../../../repositories/audit-log.sqlite';
 import { matchInvoiceToPO } from '../../../lib/matching';
 
 export const POST: APIRoute = async (context) => {
@@ -51,6 +52,24 @@ export const POST: APIRoute = async (context) => {
       status: 'pending_approval',
       match_status,
       supersedes_invoice_id: supersedes_invoice_id || undefined,
+    });
+
+    // Invoice persisted first, then its audit entries: the worst case is an
+    // invoice with an incomplete trail, never an audit row for an invoice that
+    // doesn't exist. The gap between these synchronous writes is an accepted
+    // trade-off (design decision #6), not a transaction.
+    auditLogRepository.create({
+      invoice_id: record.id,
+      actor_type: 'vendor',
+      vendor_id: vendorId,
+      actor_label: vendor.name,
+      action: 'submitted',
+    });
+    auditLogRepository.create({
+      invoice_id: record.id,
+      actor_type: 'system',
+      actor_label: 'system',
+      action: match_status,
     });
 
     return new Response(JSON.stringify(record), { status: 201, headers: { 'Content-Type': 'application/json' } });
