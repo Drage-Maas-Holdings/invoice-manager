@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
 
 if (Astro.locals.actor?.actor_type === 'vendor') {
   return Astro.redirect('/vendor');
@@ -19,7 +20,9 @@ if (Astro.locals.actor?.actor_type === 'vendor') {
           <input id="passcode" name="passcode" type="password" required class="w-full rounded border border-border bg-background px-3 py-2 text-text" />
         </div>
         <p id="login-error" class="mb-3 hidden text-sm text-red-500"></p>
-        <button type="submit" class="action-btn action-btn--primary w-full">Log in</button>
+        <button type="submit" class="action-btn action-btn--primary w-full inline-flex items-center justify-center gap-2">
+          <Icon name="log-in" /> Log in
+        </button>
       </form>
     </div>
   </div>

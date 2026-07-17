@@ -23,9 +23,18 @@ function statusPillClass(status: string): string {
 }
 
 function matchPillClass(match: string): string {
-  if (match === 'matched') return 'status-pill--done';
-  if (match === 'unmatched') return 'status-pill--rejected';
+  if (match === 'matched') return 'status-pill--success-outline';
+  if (match === 'unmatched') return 'status-pill--danger-outline';
   return 'status-pill--neutral';
+}
+
+function auditActionPillClass(action: string): string {
+  if (action === 'reconciled') return 'status-pill--done';
+  if (action === 'matched') return 'status-pill--success-outline';
+  if (action === 'rejected') return 'status-pill--rejected';
+  if (action === 'unmatched') return 'status-pill--danger-outline';
+  if (action === 'approved' || action === 'ready_for_payment') return 'status-pill--active';
+  return 'status-pill--pending';
 }
 
 function actionLabel(status: string): string | null {
@@ -42,15 +51,24 @@ function actionRoute(status: string): string | null {
   return null;
 }
 
+type IconKey = 'check' | 'send' | 'check-circle';
+function actionIcon(status: string): IconKey | null {
+  if (status === 'pending_approval') return 'check';
+  if (status === 'approved') return 'send';
+  if (status === 'ready_for_payment') return 'check-circle';
+  return null;
+}
+
 const action = actionLabel(invoice.status);
 const actionUrl = actionRoute(invoice.status);
+const actionIconName = actionIcon(invoice.status);
 const isTerminal = invoice.status === 'rejected' || invoice.status === 'reconciled';
 const isPendingApproval = invoice.status === 'pending_approval';
 ---
 <Layout title={`Invoice ${invoice.invoice_number}`}>
   <div class="page-shell">
-    <a href="/staff" class="mb-4 inline-flex items-center gap-1 text-sm text-text-muted hover:text-text transition-colors">
-      <Icon name="chevron-right" class="h-3 w-3 rotate-180" /> Back to invoices
+    <a href="/staff" class="mb-4 inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors">
+      <Icon name="arrow-left" /> Back to invoices
     </a>
 
     <div class="mb-6 flex items-start justify-between gap-4">
@@ -78,15 +96,19 @@ const isPendingApproval = invoice.status === 'pending_approval';
 
     {action && (
       <div class="mb-8 rounded-lg border border-border bg-surface p-4">
-        <div class="flex items-center gap-3">
+        <div class="flex items-end gap-3">
           {isPendingApproval && (
             <>
               <div class="flex-1">
                 <label for="action-note" class="mb-1 block text-sm text-text-muted">Note (optional)</label>
                 <input id="action-note" type="text" placeholder="Add a note..." class="w-full rounded border border-border bg-background px-3 py-2 text-sm text-text" />
               </div>
-              <button id="btn-approve" class="action-btn action-btn--primary" data-url={actionUrl}>Approve</button>
-              <button id="btn-reject" class="action-btn action-btn--danger" data-url={`/api/staff/invoices/${id}/reject`}>Reject</button>
+              <button id="btn-approve" class="action-btn action-btn--primary inline-flex items-center gap-1.5" data-url={actionUrl}>
+                <Icon name="check" /> Approve
+              </button>
+              <button id="btn-reject" class="action-btn action-btn--danger inline-flex items-center gap-1.5" data-url={`/api/staff/invoices/${id}/reject`}>
+                <Icon name="cross" /> Reject
+              </button>
             </>
           )}
           {!isPendingApproval && !isTerminal && (
@@ -95,7 +117,9 @@ const isPendingApproval = invoice.status === 'pending_approval';
                 <label for="action-note" class="mb-1 block text-sm text-text-muted">Note (optional)</label>
                 <input id="action-note" type="text" placeholder="Add a note..." class="w-full rounded border border-border bg-background px-3 py-2 text-sm text-text" />
               </div>
-              <button id="btn-action" class="action-btn action-btn--primary" data-url={actionUrl}>{action}</button>
+              <button id="btn-action" class="action-btn action-btn--primary inline-flex items-center gap-1.5" data-url={actionUrl}>
+                {actionIconName && <Icon name={actionIconName} />} {action}
+              </button>
             </>
           )}
           <p id="action-error" class="hidden text-sm text-red-500"></p>
@@ -126,7 +150,7 @@ const isPendingApproval = invoice.status === 'pending_approval';
           {auditLogs.map(log => (
             <tr>
               <td class="font-medium">{log.actor_label}</td>
-              <td><span class={`status-pill ${/rejected|unmatched/i.test(log.action) ? 'status-pill--rejected' : /reconciled|matched/i.test(log.action) ? 'status-pill--done' : log.action === 'approved' ? 'status-pill--active' : 'status-pill--pending'}`}>{log.action.replace(/_/g, ' ')}</span></td>
+              <td><span class={`status-pill ${auditActionPillClass(log.action)}`}>{log.action.replace(/_/g, ' ')}</span></td>
               <td class="caption">{log.notes ?? '—'}</td>
               <td class="numeric tabular-nums text-sm text-text-muted">{log.created_at.toLocaleString()}</td>
             </tr>

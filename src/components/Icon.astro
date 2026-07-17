@@ -1,5 +1,18 @@
 ---
-export type IconName = 'check' | 'cross' | 'arrow-right' | 'eye' | 'logout' | 'external' | 'chevron-right' | 'info';
+export type IconName =
+  | 'check'
+  | 'cross'
+  | 'arrow-right'
+  | 'arrow-left'
+  | 'eye'
+  | 'logout'
+  | 'log-in'
+  | 'external'
+  | 'chevron-right'
+  | 'info'
+  | 'check-circle'
+  | 'send'
+  | 'plus';
 
 interface Props {
   name: IconName;
@@ -63,6 +76,41 @@ const cls = className ?? 'h-4 w-4';
   name === 'info' && (
     <svg class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
+    </svg>
+  )
+}
+{
+  name === 'arrow-left' && (
+    <svg class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
+    </svg>
+  )
+}
+{
+  name === 'log-in' && (
+    <svg class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" />
+    </svg>
+  )
+}
+{
+  name === 'check-circle' && (
+    <svg class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+    </svg>
+  )
+}
+{
+  name === 'send' && (
+    <svg class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
+  )
+}
+{
+  name === 'plus' && (
+    <svg class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
     </svg>
   )
 }

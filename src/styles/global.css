@@ -7,45 +7,55 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #fafbf8;      /* soft_linen 900 */
-  --surface: #ecf1ef;         /* alabaster_grey 800 */
-  --border: #dae3de;          /* alabaster_grey 600 */
-  --text: #242423;            /* carbon_black 500 */
-  --text-muted: #5a5e5a;      /* graphite 600 */
-  --accent: #f5cb5c;          /* tuscan_sun 500 */
-  --accent-strong: #f1b81d;   /* tuscan_sun 400 */
+  --background: #f4f4f6;         /* platinum 500 */
+  --surface: #e6e6e9;            /* alabaster_grey 500 */
+  --border: #d7d7da;             /* rosy_granite 800 */
+  --text: #000000;               /* black */
+  --text-muted: #66666e;         /* dim_grey 500 */
+  --accent: #000000;             /* black */
+  --accent-strong: #3e3e43;      /* dim_grey 300 (hover) */
+  --accent-foreground: #f4f4f6;  /* platinum 500 (text on accent) */
 
-  --status-pending-bg: #fef3c7;
-  --status-pending-text: #92400e;
-  --status-active-bg: #dbeafe;
-  --status-active-text: #1e40af;
-  --status-done-bg: #d1fae5;
-  --status-done-text: #065f46;
-  --status-rejected-bg: #fee2e2;
-  --status-rejected-text: #991b1b;
-  --status-neutral-bg: #f3f4f6;
-  --status-neutral-text: #4b5563;
+  --status-pending-border: #d7d7da; /* rosy_granite 800 */
+  --status-pending-text: #66666e;   /* dim_grey 500 */
+  --status-active-bg: #c1c1c6;      /* dim_grey 800 */
+  --status-active-text: #29292d;    /* dim_grey 200 */
+  --status-done-bg: #d1fae5;        /* emerald 100 — filled success */
+  --status-done-text: #065f46;      /* emerald 800 */
+  --status-rejected-bg: #fee2e2;    /* red 100 — filled danger */
+  --status-rejected-text: #991b1b;  /* red 800 */
+  --status-success-border: #10b981; /* emerald 500 — outlined success */
+  --status-success-text: #065f46;   /* emerald 800 */
+  --status-danger-border: #ef4444;  /* red 500 — outlined danger */
+  --status-danger-text: #991b1b;    /* red 800 */
+  --status-neutral-bg: #f4f4f6;     /* platinum 500 — barely there */
+  --status-neutral-text: #9999a1;   /* rosy_granite 500 */
 }
 
 .dark {
-  --background: #242423;      /* carbon_black 500 */
-  --surface: #282a28;         /* graphite 400 */
-  --border: #5a5e5a;          /* graphite 600 */
-  --text: #fafbf8;            /* soft_linen 900 */
-  --text-muted: #acafac;      /* graphite 800 */
-  --accent: #f5cb5c;          /* tuscan_sun 500 */
-  --accent-strong: #f7d67d;   /* tuscan_sun 600 */
+  --background: #000000;         /* black */
+  --surface: #151516;            /* dim_grey 100 */
+  --border: #3e3e43;             /* dim_grey 300 */
+  --text: #f4f4f6;               /* platinum 500 */
+  --text-muted: #9999a1;         /* rosy_granite 500 */
+  --accent: #f4f4f6;             /* platinum 500 — inverts to bold light button */
+  --accent-strong: #e6e6e9;      /* alabaster_grey 500 (hover) */
+  --accent-foreground: #000000;  /* black (text on accent) */
 
-  --status-pending-bg: #78350f;
-  --status-pending-text: #fde68a;
-  --status-active-bg: #1e3a5f;
-  --status-active-text: #93c5fd;
-  --status-done-bg: #064e3b;
-  --status-done-text: #a7f3d0;
-  --status-rejected-bg: #7f1d1d;
-  --status-rejected-text: #fca5a5;
-  --status-neutral-bg: #374151;
-  --status-neutral-text: #d1d5db;
+  --status-pending-border: #3e3e43; /* dim_grey 300 */
+  --status-pending-text: #9999a1;   /* rosy_granite 500 */
+  --status-active-bg: #525259;      /* dim_grey 400 */
+  --status-active-text: #ebebec;    /* rosy_granite 900 */
+  --status-done-bg: #064e3b;        /* emerald 900 — filled success */
+  --status-done-text: #a7f3d0;      /* emerald 200 */
+  --status-rejected-bg: #7f1d1d;    /* red 900 — filled danger */
+  --status-rejected-text: #fecaca;  /* red 200 */
+  --status-success-border: #10b981; /* emerald 500 — outlined success */
+  --status-success-text: #6ee7b7;   /* emerald 300 */
+  --status-danger-border: #ef4444;  /* red 500 — outlined danger */
+  --status-danger-text: #fca5a5;    /* red 300 */
+  --status-neutral-bg: #151516;     /* dim_grey 100 */
+  --status-neutral-text: #66666e;   /* dim_grey 500 */
 }
 
 @theme {
@@ -56,56 +66,57 @@
   --color-text-muted: var(--text-muted);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
+  --color-accent-foreground: var(--accent-foreground);
 
-  --color-alabaster_grey-100: #25312b;
-  --color-alabaster_grey-200: #4a6256;
-  --color-alabaster_grey-300: #6f9281;
-  --color-alabaster_grey-400: #a0b7ab;
-  --color-alabaster_grey-500: #cfdbd5;
-  --color-alabaster_grey-600: #dae3de;
-  --color-alabaster_grey-700: #e3eae7;
-  --color-alabaster_grey-800: #ecf1ef;
-  --color-alabaster_grey-900: #f6f8f7;
+  --color-black-100: #000000;
+  --color-black-200: #000000;
+  --color-black-300: #000000;
+  --color-black-400: #000000;
+  --color-black-500: #000000;
+  --color-black-600: #333333;
+  --color-black-700: #666666;
+  --color-black-800: #999999;
+  --color-black-900: #cccccc;
 
-  --color-soft_linen-100: #323b21;
-  --color-soft_linen-200: #647642;
-  --color-soft_linen-300: #94ab69;
-  --color-soft_linen-400: #becca4;
-  --color-soft_linen-500: #e8eddf;
-  --color-soft_linen-600: #ecf0e5;
-  --color-soft_linen-700: #f1f4eb;
-  --color-soft_linen-800: #f6f8f2;
-  --color-soft_linen-900: #fafbf8;
+  --color-dim_grey-100: #151516;
+  --color-dim_grey-200: #29292d;
+  --color-dim_grey-300: #3e3e43;
+  --color-dim_grey-400: #525259;
+  --color-dim_grey-500: #66666e;
+  --color-dim_grey-600: #84848d;
+  --color-dim_grey-700: #a3a3aa;
+  --color-dim_grey-800: #c1c1c6;
+  --color-dim_grey-900: #e0e0e3;
 
-  --color-tuscan_sun-100: #3f2f04;
-  --color-tuscan_sun-200: #7f5f08;
-  --color-tuscan_sun-300: #be8e0c;
-  --color-tuscan_sun-400: #f1b81d;
-  --color-tuscan_sun-500: #f5cb5c;
-  --color-tuscan_sun-600: #f7d67d;
-  --color-tuscan_sun-700: #f9e09d;
-  --color-tuscan_sun-800: #fbebbe;
-  --color-tuscan_sun-900: #fdf5de;
+  --color-rosy_granite-100: #1e1e21;
+  --color-rosy_granite-200: #3d3d42;
+  --color-rosy_granite-300: #5b5b63;
+  --color-rosy_granite-400: #797984;
+  --color-rosy_granite-500: #9999a1;
+  --color-rosy_granite-600: #aeaeb5;
+  --color-rosy_granite-700: #c3c3c7;
+  --color-rosy_granite-800: #d7d7da;
+  --color-rosy_granite-900: #ebebec;
 
-  --color-carbon_black-100: #070707;
-  --color-carbon_black-200: #0e0e0e;
-  --color-carbon_black-300: #161615;
-  --color-carbon_black-400: #1d1d1c;
-  --color-carbon_black-500: #242423;
-  --color-carbon_black-600: #50504f;
-  --color-carbon_black-700: #7d7d7a;
-  --color-carbon_black-800: #a8a8a6;
-  --color-carbon_black-900: #d4d4d3;
+  --color-alabaster_grey-100: #2c2c31;
+  --color-alabaster_grey-200: #575762;
+  --color-alabaster_grey-300: #848492;
+  --color-alabaster_grey-400: #b5b5be;
+  --color-alabaster_grey-500: #e6e6e9;
+  --color-alabaster_grey-600: #ececee;
+  --color-alabaster_grey-700: #f0f0f2;
+  --color-alabaster_grey-800: #f5f5f6;
+  --color-alabaster_grey-900: #fafafb;
 
-  --color-graphite-100: #0a0a0a;
-  --color-graphite-200: #141514;
-  --color-graphite-300: #1e1f1e;
-  --color-graphite-400: #282a28;
-  --color-graphite-500: #333533;
-  --color-graphite-600: #5a5e5a;
-  --color-graphite-700: #828782;
-  --color-graphite-800: #acafac;
-  --color-graphite-900: #d5d7d5;
+  --color-platinum-100: #2c2c36;
+  --color-platinum-200: #58586c;
+  --color-platinum-300: #88889e;
+  --color-platinum-400: #bebeca;
+  --color-platinum-500: #f4f4f6;
+  --color-platinum-600: #f6f6f8;
+  --color-platinum-700: #f8f8f9;
+  --color-platinum-800: #fbfbfb;
+  --color-platinum-900: #fdfdfd;
 }
 
 @layer base {
@@ -181,8 +192,9 @@
   }
 
   .status-pill--pending {
-    background-color: var(--status-pending-bg);
+    background-color: transparent;
     color: var(--status-pending-text);
+    box-shadow: inset 0 0 0 1px var(--status-pending-border);
   }
 
   .status-pill--active {
@@ -200,6 +212,18 @@
     color: var(--status-rejected-text);
   }
 
+  .status-pill--success-outline {
+    background-color: transparent;
+    color: var(--status-success-text);
+    box-shadow: inset 0 0 0 1px var(--status-success-border);
+  }
+
+  .status-pill--danger-outline {
+    background-color: transparent;
+    color: var(--status-danger-text);
+    box-shadow: inset 0 0 0 1px var(--status-danger-border);
+  }
+
   .status-pill--neutral {
     background-color: var(--status-neutral-bg);
     color: var(--status-neutral-text);
@@ -214,7 +238,12 @@
   }
 
   .action-btn--primary {
-    @apply bg-accent text-carbon_black-500 hover:bg-accent-strong;
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  .action-btn--primary:hover {
+    background-color: var(--accent-strong);
   }
 
   .action-btn--danger {

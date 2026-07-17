@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ThemeToggle from '../../components/ThemeToggle.astro';
+import Icon from '../../components/Icon.astro';
 import { invoiceRepository } from '../../repositories/invoice.sqlite';
 
 const vendorId = (Astro.locals.actor as { vendor_id: string }).vendor_id;
@@ -14,8 +15,8 @@ function statusPillClass(status: string): string {
 }
 
 function matchPillClass(match: string): string {
-  if (match === 'matched') return 'status-pill--done';
-  if (match === 'unmatched') return 'status-pill--rejected';
+  if (match === 'matched') return 'status-pill--success-outline';
+  if (match === 'unmatched') return 'status-pill--danger-outline';
   return 'status-pill--neutral';
 }
 ---
@@ -26,7 +27,9 @@ function matchPillClass(match: string): string {
       <div class="flex items-center gap-4">
         <ThemeToggle />
         <form id="logout-form" method="POST" action="/api/auth/logout">
-          <button type="submit" class="action-btn action-btn--primary">Log out</button>
+          <button type="submit" class="action-btn action-btn--primary inline-flex items-center gap-1.5">
+            <Icon name="logout" /> Log out
+          </button>
         </form>
       </div>
     </div>
@@ -92,7 +95,9 @@ function matchPillClass(match: string): string {
         </div>
         <div class="sm:col-span-2">
           <p id="submit-error" class="mb-3 hidden text-sm text-red-500"></p>
-          <button type="submit" class="action-btn action-btn--primary">Submit Invoice</button>
+          <button type="submit" class="action-btn action-btn--primary inline-flex items-center gap-1.5">
+            <Icon name="plus" /> Submit Invoice
+          </button>
         </div>
       </form>
     </div>
