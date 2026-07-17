@@ -1,6 +1,6 @@
 export type AuditActorType = 'staff' | 'vendor' | 'system';
 
-export type AuditAction = 'submitted' | 'matched' | 'unmatched' | 'approved' | 'rejected';
+export type AuditAction = 'submitted' | 'matched' | 'unmatched' | 'approved' | 'rejected' | 'ready_for_payment' | 'reconciled';
 
 export interface AuditLogRecord {
   id: string;
