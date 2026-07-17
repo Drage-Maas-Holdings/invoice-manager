@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "provision-account": "tsx scripts/provision-account.ts",
+    "provision-vendor": "tsx scripts/provision-vendor.ts",
     "astro": "astro"
   },
   "dependencies": {
