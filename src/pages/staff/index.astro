@@ -26,8 +26,8 @@ function statusPillClass(status: string): string {
 }
 
 function matchPillClass(match: string): string {
-  if (match === 'matched') return 'status-pill--done';
-  if (match === 'unmatched') return 'status-pill--rejected';
+  if (match === 'matched') return 'status-pill--success-outline';
+  if (match === 'unmatched') return 'status-pill--danger-outline';
   return 'status-pill--neutral';
 }
 ---
